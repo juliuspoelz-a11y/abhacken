@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Abhaken</title>
+  <meta name="description" content="Tägliche und langfristige Aufgaben abhaken.">
+
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#F3F5F1" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111714" media="(prefers-color-scheme: dark)">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Abhaken">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app" id="app">
+    <header class="head">
+      <div class="head-text">
+        <p class="eyebrow" id="weekday"></p>
+        <h1 class="date" id="date"></h1>
+      </div>
+      <button class="icon-btn" id="openSettings" type="button" aria-label="Sicherung und Infos">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/></svg>
+      </button>
+      <div class="progress" id="progress">
+        <div class="segments" id="segments" aria-hidden="true"></div>
+        <p class="progress-label" id="progressLabel" aria-live="polite"></p>
+      </div>
+    </header>
+
+    <main class="list-wrap" id="listWrap">
+      <ul class="list" id="list"></ul>
+      <p class="empty" id="empty" hidden></p>
+    </main>
+
+    <div class="toast" id="toast" hidden>
+      <span id="toastText"></span>
+      <button type="button" id="toastUndo">Rückgängig</button>
+    </div>
+
+    <footer class="dock">
+      <form class="add" id="addForm" autocomplete="off">
+        <input class="add-input" id="newTitle" type="text" enterkeyhint="done" autocapitalize="sentences"
+               maxlength="140" aria-label="Neue Aufgabe" placeholder="Neue Aufgabe">
+        <label class="chip" id="dateChip" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg>
+          <span id="dateChipText"></span>
+          <input type="date" id="newDue" aria-label="Fällig am (optional)">
+        </label>
+        <button class="add-btn" type="submit" aria-label="Aufgabe hinzufügen">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </form>
+
+      <div class="tabs" role="tablist" aria-label="Listen">
+        <button class="tab" role="tab" type="button" id="tab-daily" data-tab="daily">
+          Täglich <span class="count" id="count-daily"></span>
+        </button>
+        <button class="tab" role="tab" type="button" id="tab-long" data-tab="long">
+          Langfristig <span class="count" id="count-long"></span>
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <dialog class="sheet" id="editSheet" aria-labelledby="editHeading">
+    <form class="sheet-body" id="editForm" method="dialog" autocomplete="off">
+      <h2 id="editHeading">Aufgabe bearbeiten</h2>
+      <label class="field">
+        <span>Aufgabe</span>
+        <input type="text" id="editTitle" maxlength="140" enterkeyhint="done" required>
+      </label>
+      <label class="field" id="editDueField">
+        <span>Fällig am (optional)</span>
+        <input type="date" id="editDue">
+      </label>
+      <div class="sheet-actions">
+        <button class="btn danger" type="button" id="editDelete">Löschen</button>
+        <button class="btn primary" type="submit">Speichern</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="sheet" id="settingsSheet" aria-labelledby="settingsHeading">
+    <div class="sheet-body">
+      <h2 id="settingsHeading">Sicherung</h2>
+      <p class="sheet-note">Deine Aufgaben liegen nur auf diesem Gerät. Speichere ab und zu eine Sicherung, zum Beispiel in „Dateien“. Damit holst du alles zurück, falls du die App löschst oder das Handy wechselst.</p>
+      <div class="sheet-stack">
+        <button class="btn primary" type="button" id="exportBtn">Sicherung speichern</button>
+        <button class="btn" type="button" id="importBtn">Sicherung laden</button>
+        <input type="file" id="importFile" accept="application/json,.json" hidden>
+      </div>
+      <p class="sheet-note small" id="settingsStatus" aria-live="polite"></p>
+      <button class="btn ghost" type="button" id="closeSettings">Schließen</button>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
